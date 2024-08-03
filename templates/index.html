@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diabetic Retinopathy Detection</title>
+    <link rel="stylesheet" href="../static/style.css" />
+  </head>
+  <body>
+    <h1 class="heading">Diabetic Retinopathy Detection</h1>
+    <div class="container">
+      <span>Upload Image for Diabetic Retinopathy Detection </span>
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+      <form method="POST" action="/predict" enctype="multipart/form-data">
+        <input
+          id="imageInput"
+          type="file"
+          name="file"
+          accept="image/*"
+          required
+        />
+        <button type="submit">Predict</button>
+      </form>
+      <h2>Preview:</h2>
+      <div class="preview">
+        <div class="image">
+          <span>Original Image</span>
+          {% if original_image is not none %}
+          <img
+            id="imagePreview"
+            src="data:image/png;base64,{{ original_image }}"
+            alt=""
+            style="max-width: 100%;"
+          />
+          {% else %}
+          <img
+            id="imagePreview"
+            src="#"
+            alt=""
+            style="max-width: 100%; display: none"
+          />
+          {% endif %}
+        </div>
+        <div>
+          <div class="image">
+            <span>CLAHE Image:</span>
+            {% if clahe_image is not none %}
+            <img
+              id="clahePreview"
+              src="data:image/png;base64,{{ clahe_image }}"
+              alt=""
+              style="max-width: 100%;"
+            />
+            {% else %}
+            <img
+              id="clahePreview"
+              src="#"
+              alt=""
+              style="max-width: 100%; display:none"
+            />
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% if prediction is not none %}
+      <span id="prediction">Prediction: {{ prediction }}</span>
+      {% endif %}
+    </div>
+    <!-- <script>
+      document
+        .getElementById("imageInput")
+        .addEventListener("change", function (event) {
+          var input = event.target;
+          var reader = new FileReader();
+          reader.onload = function () {
+            var imgPreview = document.getElementById("imagePreview");
+            var clahePreview = document.getElementById("clahePreview");
+            imgPreview.src = reader.result;
+            imgPreview.style.display = "block";
+            clahePreview.src = "data:image/png;base64,{{ clahe_image }}";
+            clahePreview.style.display = "block";
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        });
+    </script> -->
+  </body>
+</html>
